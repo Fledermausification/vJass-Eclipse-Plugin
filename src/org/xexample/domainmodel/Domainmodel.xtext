@@ -1,0 +1,135 @@
+grammar org.xexample.domainmodel.Domainmodel with org.eclipse.xtext.common.Terminals
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+
+generate domainmodel "http://www.xexample.org/domainmodel/Domainmodel"
+
+Model:
+    'model' name = ID imports += Import* items += Item* rules += Rule*;
+
+Import:
+    'import' importURI = STRING;
+
+Rule:
+    'rule' name = ID '(' items += [Item]* ')';
+
+Item:
+    'item' name = ID;
+
+
+
+
+
+/*Domainmodel:
+	(elements += ScopeType)*
+;
+
+terminal INTEGER_TYPE returns ecore::EString: 'integer';
+terminal REAL_TYPE    returns ecore::EString: 'real';
+terminal STRING_TYPE  returns ecore::EString: 'string';
+terminal BOOLEAN_TYPE returns ecore::EString: 'boolean';
+terminal NOTHING_TYPE returns ecore::EString: 'nothing';
+//terminal CODE_TYPE    returns ???
+
+
+terminal INTEGER_VALUE returns ecore::EInt:     ('-')? ('0'..'9')+;
+terminal REAL_VALUE    returns ecore::EDouble:  ('-')? (('0'..'9')+ '.' ('0'..'9')*);
+terminal STRING_VALUE  returns ecore::EString:  '"'(.)*'"';
+terminal BOOLEAN_VALUE returns ecore::EBoolean: 'true' | 'false';
+terminal NULL_VALUE    returns ecore::EString:  'null';
+//terminal CODE_VALUE    returns ???
+
+//VarType:
+//	'unit' | 'effect'
+//;
+
+VariableType:
+	(INTEGER_TYPE | REAL_TYPE | STRING_TYPE | BOOLEAN_TYPE)
+;
+
+PrimitiveVariableValue:
+	(INTEGER_VALUE | REAL_VALUE | STRING_VALUE | BOOLEAN_VALUE | NULL_VALUE)// | value = [Variable]
+;
+
+VariableValue:
+	PrimitiveVariableValue | value = [Variable]
+;
+
+ScopeType:
+	Library | Scope
+;
+
+Library:
+	'library' name = ID
+	    (elements += ScopeElement)*
+	'endlibrary'
+;
+
+Scope:
+	'scope' name = ID ('requires' reqs += [Library] (',' reqs += [Library])*)?
+	    (elements += ScopeElement)*
+	'endscope'
+;
+
+ScopeElement:
+	GlobalScope | Function
+;
+
+GlobalScope:
+	'globals'
+	    (globals += GlobalVariable)*
+	'endglobals'
+;
+
+Variable :
+	GlobalVariable | LocalVariable | FunctionArgument
+;
+
+GlobalVariable :
+	((private ?= 'private') | (public ?= 'public'))? (constant ?= 'constant')?
+	type = VariableType name = ID '=' value = VariableValue
+;
+
+LocalVariable:
+	"local" type = VariableType name = ID '=' value = VariableValue
+;
+
+Function:
+	'function' name = ID 'takes' args += FunctionArgument (',' args += FunctionArgument)* 'returns' (VariableType | NOTHING_TYPE)
+	    (locals += LocalVariable)*
+	    (opertations += FunctionOperation)*
+	'endfunction'
+;
+
+FunctionArgument:
+	(type = VariableType name = ID) | type = NOTHING_TYPE
+;
+
+FunctionOperation:
+	(FunctionCall | VariableAssignment)
+;
+
+FunctionCall:
+	'call' name = [Function] '(' (args += VariableValue (',' args += VariableValue)*)? ')'
+;
+
+VariableAssignment:
+	'set' name = [Variable] '=' value = VariableValue
+;*/
+
+/* Still missing:
+    * operators
+    * return statements
+    * if/then/else/elseif
+    * boolean evaluation for variables/arguments
+    * loop/exitwhen
+    * natives
+    * struct
+    * module
+    * textmacro
+    * import
+    * interface
+    * arrays
+    * hook
+    * 
+ */
