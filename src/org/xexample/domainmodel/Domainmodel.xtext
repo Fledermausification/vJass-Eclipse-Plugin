@@ -4,7 +4,7 @@ import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 
 generate domainmodel "http://www.xexample.org/domainmodel/Domainmodel"
 
-Model:
+/*Model:
     'model' name = ID imports += Import* items += Item* rules += Rule*;
 
 Import:
@@ -15,12 +15,12 @@ Rule:
 
 Item:
     'item' name = ID;
+*/
 
 
 
 
-
-/*Domainmodel:
+Domainmodel:
 	(elements += ScopeType)*
 ;
 
@@ -52,7 +52,7 @@ PrimitiveVariableValue:
 ;
 
 VariableValue:
-	PrimitiveVariableValue | value = [Variable]
+	prim = PrimitiveVariableValue | value = [Variable]
 ;
 
 ScopeType:
@@ -95,7 +95,7 @@ LocalVariable:
 ;
 
 Function:
-	'function' name = ID 'takes' args += FunctionArgument (',' args += FunctionArgument)* 'returns' (VariableType | NOTHING_TYPE)
+	'function' name = ID 'takes' args += FunctionArgument (',' args += FunctionArgument)* 'returns' return = (VariableType | NOTHING_TYPE)
 	    (locals += LocalVariable)*
 	    (opertations += FunctionOperation)*
 	'endfunction'
@@ -106,7 +106,7 @@ FunctionArgument:
 ;
 
 FunctionOperation:
-	(FunctionCall | VariableAssignment)
+	(FunctionCall | VariableAssignment | ReturnStatement)
 ;
 
 FunctionCall:
@@ -115,13 +115,16 @@ FunctionCall:
 
 VariableAssignment:
 	'set' name = [Variable] '=' value = VariableValue
-;*/
+;
+
+ReturnStatement:
+	'return' (type = [Variable])?
+;
 
 /* Still missing:
     * operators
-    * return statements
     * if/then/else/elseif
-    * boolean evaluation for variables/arguments
+    * boolean/arithmetic evaluation for variables/arguments/returns
     * loop/exitwhen
     * natives
     * struct
