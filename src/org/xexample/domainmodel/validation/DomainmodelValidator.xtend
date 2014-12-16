@@ -40,14 +40,20 @@ class DomainmodelValidator extends AbstractDomainmodelValidator {
 	
 	@Check
 	def void checkFunctionDefinitionReturns(Function function) {
+		System.out.println("=====================================\nChecking return for " + function +", it should be returning " + function.^return);
+		
+		
 		var invalid = false;
 		
 		if (function.^return != "nothing") {
 			//Function returns *something*
 			var returns = false;
 			for (FunctionOperation o : function.opertations) {
+				System.out.println("Checking op: " + o)
 				if (o instanceof ReturnStatement) {
 					var r = o as ReturnStatement;
+					System.out.print("Found a RetrunStatement: " + r);
+					System.out.println(", returning " + r.type.type);
 					if (r.type != null && r.type.type == function.^return) {
 						returns = true;
 					}

@@ -58,8 +58,14 @@ local.properties
 .settings/
 .loadpath
 /src/main/resources/rebel.xml
+/META-INF/*
+/src-gen/*
+/model/*
+/TestingProject/*
+/xtend-gen/*
 # External tool builders
 .externalToolBuilders/
+plugin.xml_gen
  
 # Locally stored "Eclipse launch configurations"
 *.launch
