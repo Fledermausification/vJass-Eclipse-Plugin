@@ -17,15 +17,21 @@ import org.xexample.domainmodel.domainmodel.ReturnStatement
  * see http://www.eclipse.org/Xtext/documentation.html#validation
  */
 class DomainmodelValidator extends AbstractDomainmodelValidator {
+	/**
+	 * This is just a test one, showing a warning rather than an error
+	 */
 	@Check
 	def void checkFunctionNameStartsWithCapital(Function function) {
 		//This is just a dummy one to test stuff out
 		if (!Character::isUpperCase(function.getName().charAt(0))) {
-			warning('Function names should start with a capital', 
+			warning("Function names should start with a capital", 
 					DomainmodelPackage.Literals::FUNCTION__NAME)
 		}
 	}
 	
+	/**
+	 * Checks that if a function definition takes 'nothing', it takes no other arguments 
+	 */
 	@Check
 	def void checkFunctionDefinitionArguments(Function function) {
 		var nothing = false;
@@ -33,27 +39,26 @@ class DomainmodelValidator extends AbstractDomainmodelValidator {
 			if (a.type == "nothing") nothing = true;
 		}
 		if (nothing && function.args.size() > 1) {
-			error('Invalid function arguments', 
+			error("A function cannot take 'nothing' and other arguments", 
 				  DomainmodelPackage.Literals::FUNCTION__NAME)
 		}
 	}
 	
+	/**
+	 * Checks that a function definition only returns the variable type that it declared it returns
+	 * 
+	 * TODO: Allow primitive returns (e.g. 123 for integer)
+	 */
 	@Check
 	def void checkFunctionDefinitionReturns(Function function) {
-		System.out.println("=====================================\nChecking return for " + function +", it should be returning " + function.^return);
-		
-		
 		var invalid = false;
 		
 		if (function.^return != "nothing") {
 			//Function returns *something*
 			var returns = false;
 			for (FunctionOperation o : function.opertations) {
-				System.out.println("Checking op: " + o)
 				if (o instanceof ReturnStatement) {
 					var r = o as ReturnStatement;
-					System.out.print("Found a RetrunStatement: " + r);
-					System.out.println(", returning " + r.type.type);
 					if (r.type != null && r.type.type == function.^return) {
 						returns = true;
 					}
@@ -63,8 +68,8 @@ class DomainmodelValidator extends AbstractDomainmodelValidator {
 				}
 			}
 			
-			if (!returns) {
-				error('Function has no return statement', 
+			if (!returns && !invalid) {
+				error("Function is missing a return statement", 
 					  DomainmodelPackage.Literals::FUNCTION__RETURN)
 			}
 		}
@@ -78,11 +83,16 @@ class DomainmodelValidator extends AbstractDomainmodelValidator {
 		}
 		
 		if (invalid) {
-			error('Incorrect return type', 
+			error("Function is not returning a " + function.^return, 
 				  DomainmodelPackage.Literals::FUNCTION__RETURN)
 		}
 	}
 	
+	/**
+	 * Checks that a function is called with the correct number and type of arguments
+	 * 
+	 * TODO: Check the type of primitive values passed in (e.g. 123)
+	 */
 	@Check
 	def void checkFunctionCallArguments(FunctionCall function) {
 		/*System.out.println("=====================\nChecking function call to function " + function.name + " with arguments:");
@@ -105,7 +115,7 @@ class DomainmodelValidator extends AbstractDomainmodelValidator {
 		if (argsDef.size() == 1 && argsDef.get(0).type == "nothing" && args.size() > 0) {
 			//Function def takes nothing, function call is giving > 0 parameters
 			//We shouldn't need to check the size but it doesn't hurt to
-			error('Incorrect amount of arguments', 
+			error("Incorrect amount of arguments", 
 				  DomainmodelPackage.Literals::FUNCTION_CALL__NAME)
 		}
 		else if (args.size() == argsDef.size()) {
@@ -128,14 +138,14 @@ class DomainmodelValidator extends AbstractDomainmodelValidator {
 			}
 			
 			if (invalid) {
-				error('Arguments are invalid!', 
+				error("Arguments are invalid!", 
 				      DomainmodelPackage.Literals::FUNCTION_CALL__NAME)
 			}
 		}
 		else if (argsDef.get(0).type != "nothing") {
 			//We only care about argument number mismatches for non-nothing function def's
 			//The first if statement will handle those
-			error('Incorrect amount of arguments', 
+			error("Incorrect amount of arguments", 
 				  DomainmodelPackage.Literals::FUNCTION_CALL__NAME)
 		}
 	}

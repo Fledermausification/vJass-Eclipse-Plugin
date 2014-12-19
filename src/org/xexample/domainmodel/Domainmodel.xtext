@@ -91,7 +91,7 @@ GlobalVariable :
 ;
 
 LocalVariable:
-	"local" type = VariableType name = ID '=' value = VariableValue
+	'local' type = VariableType name = ID '=' value = VariableValue
 ;
 
 Function:
@@ -118,7 +118,7 @@ VariableAssignment:
 ;
 
 ReturnStatement:
-	'return' (type = [Variable])?
+	{ReturnStatement} 'return' (type = [Variable])?
 ;
 
 /* Still missing:
